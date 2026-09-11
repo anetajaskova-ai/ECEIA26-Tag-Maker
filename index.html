@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<!-- the title and this description are overwritten by event.config.js -->
+<meta name="description" content="Make your name tag and keepsake.">
+<title>Tag Maker</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,500;0,600;0,700;0,900;1,500;1,600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ===================================================================
+     The screens people walk through. You can edit the wording straight
+     in here, but anything carrying data-text / data-html / data-img is
+     filled in from event.config.js when the page loads -- change those
+     in the config, not here.
+     =================================================================== -->
+<div class="app" id="app">
+
+  <button class="backfab" id="backBtn" aria-label="Back" hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+
+  <div class="screens" id="screens">
+
+    <!-- SCREEN 0 -- Welcome -->
+    <section class="screen" data-step="0">
+      <div class="screen-body">
+        <div class="brand-row">
+          <img src="assets/brand/badge.png" data-img="badge" alt="">
+          <div class="brand-text">
+            <div class="b1" data-text="badgeTitle">ENAI SUMMER SCHOOL 2026</div>
+            <div class="b2" data-text="tagline">Ideas embedded in a declaration.</div>
+          </div>
+        </div>
+
+        <h1 class="hero-headline" style="margin-top:22px;" data-html="heroLine1">Share your<br>memories</h1>
+        <h1 class="hero-headline teal" data-html="heroLine2">of our summer<br>school</h1>
+        <div class="rule"></div>
+        <p class="lede centered" data-text="heroLede">Your little name tag with ideas, insights, and new friends you're taking away from the ENAI Summer School.</p>
+
+        <div class="hero-row">
+          <div class="hero-name-col">
+            <div class="field-label">First, what is your name</div>
+            <input class="underline-input" id="nameInput" placeholder="XXX" maxlength="40" autocomplete="off">
+            <button class="btn btn-primary btn-compact" id="createBtn" disabled>
+              Create
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+          <div class="hero-cards-wrap">
+            <div class="hero-cards">
+              <div class="tagbox c1"><div class="tag" data-cover="teal">
+                <img class="tag-logo" src="assets/brand/tag-logo.png" data-img="tagLogo" alt="">
+                <div class="tag-title" data-text="tagTitle">ENAI SUMMER SCHOOL 2026</div>
+                <div class="tag-tagline" data-text="tagline">Ideas embedded in a declaration.</div>
+                <img class="tag-badge" src="assets/brand/badge.png" data-img="badge" alt="">
+                <div class="tag-namebox"><div class="tag-name placeholder">Add your name</div></div>
+                <img class="tag-check" src="assets/brand/check.png" data-img="check" alt="">
+              </div></div>
+              <div class="tagbox c2"><div class="tag" data-cover="mint">
+                <img class="tag-logo" src="assets/brand/tag-logo.png" data-img="tagLogo" alt="">
+                <div class="tag-title" data-text="tagTitle">ENAI SUMMER SCHOOL 2026</div>
+                <div class="tag-tagline" data-text="tagline">Ideas embedded in a declaration.</div>
+                <img class="tag-badge" src="assets/brand/badge.png" data-img="badge" alt="">
+                <div class="tag-namebox"><div class="tag-name placeholder">Add your name</div></div>
+                <img class="tag-check" src="assets/brand/check.png" data-img="check" alt="">
+              </div></div>
+              <div class="tagbox c3"><div class="tag" data-cover="lavender">
+                <img class="tag-logo" src="assets/brand/tag-logo.png" data-img="tagLogo" alt="">
+                <div class="tag-title" data-text="tagTitle">ENAI SUMMER SCHOOL 2026</div>
+                <div class="tag-tagline" data-text="tagline">Ideas embedded in a declaration.</div>
+                <img class="tag-badge" src="assets/brand/badge.png" data-img="badge" alt="">
+                <div class="tag-namebox"><div class="tag-name placeholder">Add your name</div></div>
+                <img class="tag-check" src="assets/brand/check.png" data-img="check" alt="">
+              </div></div>
+            </div>
+            <div class="integrity-badge">
+              <img src="assets/brand/pledge.png" data-img="pledgeIcon" alt="">
+              <span data-text="pledge">I have the courage to promote academic integrity</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 1 -- Cover -->
+    <section class="screen" data-step="1">
+      <div class="screen-body has-fab">
+        <div class="cols narrow-first">
+          <div class="col">
+            <h1 class="headline">Pick your cover</h1>
+            <div class="eyebrow">Customise your name tag</div>
+            <div class="cover-hero-wrap tagbox">
+              <div class="tag" id="tagPreview1" data-cover="mint">
+                <img class="tag-logo" src="assets/brand/tag-logo.png" data-img="tagLogo" alt="">
+                <div class="tag-title" data-text="tagTitle">ENAI SUMMER SCHOOL 2026</div>
+                <div class="tag-tagline" data-text="tagline">Ideas embedded in a declaration.</div>
+                <img class="tag-badge" src="assets/brand/badge.png" data-img="badge" alt="">
+                <div class="tag-namebox"><div class="tag-name placeholder" id="tagNameText1">Add your name</div></div>
+                <img class="tag-check" src="assets/brand/check.png" data-img="check" alt="">
+              </div>
+            </div>
+            <p class="lede" style="text-align:center;">You can choose the background of the tag and the colour of the name field.</p>
+          </div>
+          <div class="col">
+            <div class="option-grid">
+              <div class="option-card">
+                <div class="tagbox"><div class="tag" data-cover="teal">
+                  <img class="tag-logo" src="assets/brand/tag-logo.png" data-img="tagLogo" alt="">
+                  <div class="tag-title" data-text="tagTitle">ENAI SUMMER SCHOOL 2026</div>
+                  <div class="tag-tagline" data-text="tagline">Ideas embedded in a declaration.</div>
+                  <img class="tag-badge" src="assets/brand/badge.png" data-img="badge" alt="">
+                  <div class="tag-namebox"><div class="tag-name placeholder">Add your name</div></div>
+                  <img class="tag-check" src="assets/brand/check.png" data-img="check" alt="">
+                </div></div>
+                <button class="choose-btn" data-cover="teal">Choose option 1</button>
+              </div>
+              <div class="option-card">
+                <div class="tagbox"><div class="tag" data-cover="mint">
+                  <img class="tag-logo" src="assets/brand/tag-logo.png" data-img="tagLogo" alt="">
+                  <div class="tag-title" data-text="tagTitle">ENAI SUMMER SCHOOL 2026</div>
+                  <div class="tag-tagline" data-text="tagline">Ideas embedded in a declaration.</div>
+                  <img class="tag-badge" src="assets/brand/badge.png" data-img="badge" alt="">
+                  <div class="tag-namebox"><div class="tag-name placeholder">Add your name</div></div>
+                  <img class="tag-check" src="assets/brand/check.png" data-img="check" alt="">
+                </div></div>
+                <button class="choose-btn is-selected" data-cover="mint">Choose option 2</button>
+              </div>
+              <div class="option-card">
+                <div class="tagbox"><div class="tag" data-cover="lavender">
+                  <img class="tag-logo" src="assets/brand/tag-logo.png" data-img="tagLogo" alt="">
+                  <div class="tag-title" data-text="tagTitle">ENAI SUMMER SCHOOL 2026</div>
+                  <div class="tag-tagline" data-text="tagline">Ideas embedded in a declaration.</div>
+                  <img class="tag-badge" src="assets/brand/badge.png" data-img="badge" alt="">
+                  <div class="tag-namebox"><div class="tag-name placeholder">Add your name</div></div>
+                  <img class="tag-check" src="assets/brand/check.png" data-img="check" alt="">
+                </div></div>
+                <button class="choose-btn" data-cover="lavender">Choose option 3</button>
+              </div>
+            </div>
+            <div class="fab-row">
+              <button class="btn btn-primary next-btn" data-next="2">
+                Make it yours!
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 2 -- Personalize -->
+    <section class="screen" data-step="2">
+      <div class="screen-body has-fab">
+        <div class="headline-split">
+          <h1 class="headline" style="font-size:28px;">Make a tag yours</h1>
+          <span class="sub"><span class="divider">|</span>&nbsp; it's time to make it personal</span>
+        </div>
+
+        <div class="cols" style="margin-top:4px;">
+          <div class="col">
+            <div class="panel-light">
+              <div class="tagbox-wrap tagbox">
+                <div class="tag-stage" id="tagStage2">
+                <div class="tag" id="tagPreview2" data-cover="mint">
+                  <img class="tag-logo" src="assets/brand/tag-logo.png" data-img="tagLogo" alt="">
+                  <div class="tag-title" data-text="tagTitle">ENAI SUMMER SCHOOL 2026</div>
+                  <div class="tag-tagline" data-text="tagline">Ideas embedded in a declaration.</div>
+                  <img class="tag-badge" src="assets/brand/badge.png" data-img="badge" alt="">
+                  <div class="tag-namebox"><div class="tag-name placeholder" id="tagNameText2">Add your name</div></div>
+                  <img class="tag-check" src="assets/brand/check.png" data-img="check" alt="">
+                </div>
+              </div>
+              </div>
+              <div class="hint">Your photo and the stickers work the same way: tap to select, drag to move, and use the corner handles to resize, rotate or remove.</div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="panel-dark">
+              <div class="field-label" style="margin-bottom:0;">Choose your stickers</div>
+              <div class="sticker-row-wrap">
+                <div class="sticker-tray" id="stickerTray"></div>
+                <div class="lockup-col"><img src="assets/brand/partners.png" data-img="partners" alt="Centre for Academic Integrity in the UAE, Dubai"></div>
+              </div>
+              <div class="drag-hint">Drag a sticker directly onto your tag.</div>
+            </div>
+            <div class="footer-caption" data-html="footerLine">ENAI Summer School &middot; Dubai</div>
+            <div class="fab-row">
+              <button class="btn btn-primary next-btn" data-next="3">
+                Share your thoughts
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 3 -- Journal -->
+    <section class="screen" data-step="3">
+      <div class="screen-body has-fab">
+        <div class="journal-col">
+          <h1 class="headline" style="font-size:30px;" data-html="journalHeadline">This is your place to share your ideas, insights<span class="accent">&hellip; anything you want.</span></h1>
+
+          <div class="idea-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.6 4.9L18 9.5l-4.4 1.6L12 16l-1.6-4.9L6 9.5l4.4-1.6z"/></svg>
+            <span>Some ideas, if you feel lost and don't know how to start &mdash; tap one to drop it in:</span>
+          </div>
+          <div class="idea-chips" id="ideaChips">
+            <button class="idea-chip" data-line="What influenced me: ">What influenced me?</button>
+            <button class="idea-chip" data-line="What I learned: ">What I learned</button>
+            <button class="idea-chip" data-line="What I want to take with me: ">What I want to take with me</button>
+          </div>
+
+          <div class="journal-wrap">
+            <textarea class="journal-textarea" id="journalText" placeholder="Space for anything you want to remember, a question for your facilitator, or a commitment you want to keep."></textarea>
+          </div>
+
+          <div class="fab-row">
+            <button class="btn btn-primary next-btn" data-next="4">
+              Add your pictures
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 4 -- Pictures -->
+    <section class="screen" data-step="4">
+      <div class="screen-body has-fab">
+        <div class="cols">
+          <div class="col">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap;">
+              <h1 class="headline" style="font-size:30px;" data-text="picturesHeadline">Add your pictures</h1>
+              <span style="font-family:'Fraunces',serif; font-weight:600; font-size:21px; color:var(--teal);" data-text="placeName">Dubai</span>
+            </div>
+            <p class="lede" style="font-style:italic;" data-text="galleryLede">Choose from our Dubai gallery, or share your own photo from Dubai.</p>
+
+            <div class="photo-frame" id="sceneFrame" data-crop="scene">
+              <img id="sceneHeroImg" src="" alt="Selected Dubai photo">
+              <div class="frame-empty" id="sceneFrameEmpty" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 14l4.5-4 4 3.5L15 10l6 5"/></svg>
+                <span>Pick one of the two options below</span>
+              </div>
+              <div class="frame-hint" id="sceneFrameHint">Drag to reposition</div>
+            </div>
+            <div class="zoom-row" id="sceneZoomRow">
+              <label for="sceneZoom">Zoom</label>
+              <input type="range" id="sceneZoom" min="1" max="4" step="0.02" value="1">
+              <button class="zoom-reset" type="button" data-reset="scene">Reset</button>
+            </div>
+
+            <div class="choice-row" id="sceneChoiceRow">
+              <button class="choice-card is-active" type="button" data-source="gallery">
+                <span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 14l4.5-4 4 3.5L15 10l6 5"/></svg></span>
+                <span class="cc-title">Choose from our gallery</span>
+                <span class="cc-sub" data-text="gallerySub">Six ready-made Dubai photos</span>
+              </button>
+              <button class="choice-card" type="button" data-source="own">
+                <span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L8 8m4-4l4 4"/><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg></span>
+                <span class="cc-title">Choose your own photo</span>
+                <span class="cc-sub">Upload from your device</span>
+              </button>
+            </div>
+
+            <div class="choice-panel" id="galleryPanel">
+              <div class="gallery-grid" id="galleryGrid"></div>
+            </div>
+
+            <div class="choice-panel" id="ownScenePanel" hidden>
+              <div class="upload-drop" id="ownSceneDrop">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L8 8m4-4l4 4"/><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+                <span>Tap to choose a photo from your device</span>
+              </div>
+            </div>
+
+            <div class="quality-note">
+              <b>Photo quality</b>
+              <ul>
+                <li>Landscape (16:9) works best &mdash; that is the shape of the photo area.</li>
+                <li>At least <b>1200 &times; 675 px</b>; the keepsake exports each photo at about 760 &times; 428 px, so anything larger stays sharp.</li>
+                <li>Sharp, well-lit JPEG or PNG. Screenshots of photos and heavily compressed images look soft.</li>
+                <li>Higher resolution generally gives a better result &mdash; the photo is cropped to fill the area, so keep the important part near the centre.</li>
+                <li data-text="galleryQualityNote">This is guidance for your own photos &mdash; the Dubai gallery photos are already high-resolution originals.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="section-title">Upload your photo</div>
+            <div class="section-sub">A photo from the sessions, with new friends, colleagues&hellip; a different picture from your portrait.</div>
+
+            <div class="choice-row" id="selfieChoiceRow">
+              <button class="choice-card is-active" type="button" data-mode="single">
+                <span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.2"/></svg></span>
+                <span class="cc-title">Single photo</span>
+                <span class="cc-sub">One picture fills the area</span>
+              </button>
+              <button class="choice-card" type="button" data-mode="collage">
+                <span class="cc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span>
+                <span class="cc-title">Collage &mdash; 4 photos</span>
+                <span class="cc-sub">Pick exactly four pictures</span>
+              </button>
+            </div>
+
+            <div class="photo-frame is-empty" id="selfieDrop" data-crop="selfie" style="margin-top:12px;">
+              <div class="frame-empty" id="selfieFrameEmpty">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.2"/><path d="M8 6l1.2-2h5.6L16 6"/></svg>
+                <span id="selfieDropLabel">Tap to upload one photo from the conference</span>
+              </div>
+            </div>
+            <div class="zoom-row" id="selfieZoomRow" hidden>
+              <label for="selfieZoom">Zoom</label>
+              <input type="range" id="selfieZoom" min="1" max="4" step="0.02" value="1">
+              <button class="zoom-reset" type="button" data-reset="selfie">Reset</button>
+            </div>
+            <div class="save-msg" id="selfieMsg">&nbsp;</div>
+            <button class="own-photo-link" id="selfieChangeLink" type="button" hidden>Change this photo</button>
+
+            <div class="fab-row">
+              <button class="btn btn-primary next-btn" data-next="5">
+                Preview my keepsake
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 5 -- Keepsake -->
+    <section class="screen" data-step="5">
+      <div class="screen-body has-fab">
+        <div class="cols preview-cols">
+          <div class="col">
+            <div class="keepsake" id="memoryCard">
+              <button class="keepsake-band top" id="bandScene" type="button">
+                <span class="band-photo" id="bandSceneFrame"><img id="sceneImg" src="" alt="Photo from Dubai"></span>
+              </button>
+              <div class="keepsake-tag tagbox" id="keepsakeTagBox">
+                <span class="tag-resize" id="tagResize" title="Drag to resize the tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H3v-6"/><path d="M15 3h6v6"/><path d="M3 21L21 3"/></svg></span>
+                <div class="tag-stage" id="tagStage5">
+                <div class="tag no-nums" id="tagPreview5" data-cover="mint">
+                  <img class="tag-logo" src="assets/brand/tag-logo.png" data-img="tagLogo" alt="">
+                  <div class="tag-title" data-text="tagTitle">ENAI SUMMER SCHOOL 2026</div>
+                  <div class="tag-tagline" data-text="tagline">Ideas embedded in a declaration.</div>
+                  <img class="tag-badge" src="assets/brand/badge.png" data-img="badge" alt="">
+                  <div class="tag-namebox"><div class="tag-name placeholder" id="tagNameText5">Add your name</div></div>
+                  <img class="tag-check" src="assets/brand/check.png" data-img="check" alt="">
+                </div>
+                </div>
+              </div>
+              <button class="keepsake-band bottom" id="bandSelfie" type="button">
+                <span class="band-photo"><div class="collage" id="selfieCollage" hidden></div><img id="selfieImg" src="" alt="Your photo" hidden>
+                <svg id="selfieFallback" viewBox="0 0 400 150" preserveAspectRatio="xMidYMid slice">
+                  <defs><linearGradient id="sky5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BEE0F5"/><stop offset="1" stop-color="#EAF6FC"/></linearGradient></defs>
+                  <rect width="400" height="150" fill="url(#sky5)"/>
+                  <circle cx="70" cy="36" r="15" fill="#fff"/><circle cx="88" cy="42" r="11" fill="#fff"/>
+                  <path d="M0 108 C70 86 130 120 200 102 C270 86 310 116 400 96 L400 150 L0 150 Z" fill="#BFDD8E"/>
+                  <path d="M0 130 C90 108 160 140 230 120 C310 100 350 132 400 114 L400 150 L0 150 Z" fill="#8FBB4E"/>
+                </svg></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="col">
+            <h1 class="headline" style="font-size:30px;">This one is yours to keep!</h1>
+            <p class="lede" style="color:var(--teal); font-weight:500; margin-top:10px;">Your small record of a big few days. Add your words, then keep it or share it.</p>
+            <p class="share-note" style="margin-top:10px;">Drag the handle in the corner of the tag to resize it. Tap a photo to swap it.</p>
+
+            <div class="caption-block">
+              <label class="field-label" for="shareCaption" style="margin-bottom:6px;">Your caption</label>
+              <textarea class="caption-input" id="shareCaption" rows="9" placeholder="This is your place to share your ideas, insights&hellip; anything you want"></textarea>
+              <div class="caption-foot">
+                <span>This text is not printed on the image &mdash; it is copied for your post.</span>
+                <button class="caption-copy" id="copyCaptionBtn" type="button">Copy</button>
+              </div>
+            </div>
+
+            <div class="share-panel">
+            <h2 class="share-panel-title">Ready to share?</h2>
+            <div class="social-row">
+              <button class="social-btn" data-social="instagram" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+              </button>
+              <button class="social-btn" data-social="linkedin" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 8.5H3.56V20.5H6.94V8.5ZM5.25 3.5A1.97 1.97 0 1 0 5.27 7.44 1.97 1.97 0 0 0 5.25 3.5ZM20.5 20.5H17.13V14.28C17.13 12.79 16.6 11.78 15.28 11.78C14.27 11.78 13.67 12.46 13.41 13.12C13.31 13.35 13.29 13.68 13.29 14.02V20.5H9.92S9.96 9.42 9.92 8.5H13.29V9.95C13.74 9.25 14.55 8.25 16.58 8.25C19.09 8.25 20.5 9.9 20.5 13.44V20.5Z"/></svg>
+              </button>
+              <button class="social-btn" data-social="whatsapp" aria-label="WhatsApp">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.3A9 9 0 1 0 12 3Zm0 1.8a7.2 7.2 0 0 1 6.2 10.9l-.2.3.5 1.9-2-.5-.3.2A7.2 7.2 0 1 1 12 4.8Zm-3.3 3.5c-.2 0-.5 0-.6.3-.2.3-.7.9-.7 2s.7 2.2.8 2.4c.1.2 1.6 2.6 4 3.6 2 .8 2.4.7 2.8.6.5 0 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3l-1.7-.8c-.2-.1-.4-.1-.6.1l-.7.9c-.1.1-.3.2-.5.1-.3-.1-1.2-.5-2.1-1.4-.8-.7-1.3-1.6-1.5-1.9-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.3.2-.5.1-.2 0-.4 0-.5l-.8-1.8c-.2-.4-.4-.4-.6-.4Z"/></svg>
+              </button>
+            </div>
+
+            <label class="consent-row">
+              <input type="checkbox" id="consentCheck">
+              <span data-text="consent">I'm happy for ENAI to share this tag and my words, and I agree to tag @ecaiu_official and @enaiofficial on Instagram and LinkedIn.</span>
+            </label>
+            </div>
+
+            <div class="save-msg" id="saveMsg1">&nbsp;</div>
+            <div class="save-fallback" id="saveFallback" hidden>
+              <p>Press and hold the picture, then choose <b>Add to Photos</b>.</p>
+              <img id="saveFallbackImg" src="" alt="Your keepsake">
+            </div>
+            <div class="share-actions">
+              <button class="btn btn-primary" id="downloadBtn" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+                Save to device
+              </button>
+              <button class="btn btn-outline" id="shareSaveBtn" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+                Share
+              </button>
+              <button class="btn btn-ghost" id="restartBtn">Make another one</button>
+            </div>
+
+            <p class="share-note">
+              <b>How sharing works:</b> On a phone, <b>Save to device</b> opens your share sheet &mdash;
+              choose <b>Save Image</b> and the keepsake goes into your photos. Instagram and TikTok
+              don't let a website post for you, so open Instagram afterwards and pick it from there. The caption
+              (including <b>@ecaiu_official</b> and <b>@enaiofficial</b>) is copied for you &mdash; paste it and
+              the tags become real mentions. <b>Share</b> opens your phone's share sheet with the
+              image attached where your device supports it; LinkedIn and WhatsApp open with the text ready.
+            </p>
+
+            <div class="footer-logo">
+              <img src="assets/brand/badge.png" data-img="badge" alt="">
+              <div class="brand-text">
+                <div class="b1" data-text="badgeTitle">ENAI SUMMER SCHOOL 2026</div>
+                <div class="b2" data-text="tagline">Ideas embedded in a declaration.</div>
+              </div>
+            </div>
+            <div class="build-stamp" data-text="buildStamp">Version 1.0</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<div class="export-rig" id="exportRig"></div>
+
+<script src="event.config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

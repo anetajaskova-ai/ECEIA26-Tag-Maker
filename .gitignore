@@ -1,0 +1,43 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Claude Code local settings
+.claude/
+CLAUDE.local.md
+
+# Build output of build-single-file.py -- generated, never edited by hand
+dist/
+
+# Design sources and full-resolution originals (keep these on your own disk)
+design/
+originals/
+*.psd
+*.ai
+*.sketch
+*.fig
+
+# Node / tooling (not used, kept for safety)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Environment and secrets
+.env
+.env.*
+*.pem
+*.key
+secrets.*
+
+# Temp
+tmp/
+*.log
