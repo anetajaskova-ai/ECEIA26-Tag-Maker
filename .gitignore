@@ -41,3 +41,4 @@ secrets.*
 # Temp
 tmp/
 *.log
+_originals/

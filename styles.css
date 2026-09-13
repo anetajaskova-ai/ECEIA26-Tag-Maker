@@ -141,7 +141,7 @@ img{display:block;}
 .tagbox{container-type:inline-size; width:100%;}
 .tag{
   position:relative; display:flex; flex-direction:column; align-items:stretch;
-  aspect-ratio:1.48;
+  aspect-ratio:var(--tag-ratio, 1.48);
   border-radius:5.5cqw; padding:4.5% 5% 3%;
   overflow:hidden;
   border:1px solid rgba(18,51,48,.14);
@@ -151,6 +151,19 @@ img{display:block;}
 .tag[data-cover="teal"]{background:var(--cover-teal);}
 .tag[data-cover="mint"]{background:var(--cover-mint);}
 .tag[data-cover="lavender"]{background:var(--cover-lavender);}
+
+/* a tag that uses a ready-made design as its background (EVENT.tag.background) */
+.tag.has-bg{
+  background-image:var(--tag-bg);
+  background-size:cover; background-position:center; background-repeat:no-repeat;
+  border-color:rgba(0,0,0,.07);
+}
+/* ... and then the name sits straight on that design, with no field behind it */
+.tag.no-namebox .tag-namebox{
+  background:none; border-radius:0;
+  padding:7cqw 6cqw 0; margin-top:0; margin-bottom:8cqw;   /* sits where the design's name line is */
+}
+.tag.no-namebox .tag-name{color:var(--ink);}
 
 /* fixed ECAI branding: top-left of every tag */
 .tag-logo{
@@ -308,6 +321,8 @@ img{display:block;}
 .polaroid-caption{font-family:"Fraunces",serif; font-weight:700; font-size:14px; color:var(--ink);}
 .polaroid-note{font-size:10.5px; color:var(--muted); max-width:130px; line-height:1.35;}
 body.is-exporting .tag-resize, body.is-exporting .frame-hint{display:none !important;}
+/* an empty photo slot invites you to add one -- it is not part of the keepsake */
+#memoryCard .placed-sticker.photo-empty{display:none;}
 /* the exported file is a plain rectangle, like any Instagram post */
 body.is-exporting .keepsake{border-radius:0 !important; box-shadow:none !important;}
 .your-name-echo{font-family:"Fraunces",serif; font-weight:700; font-size:26px; line-height:1.1; word-break:break-word;}

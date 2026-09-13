@@ -37,6 +37,19 @@ window.EVENT = {
     buildStamp: "Version 1.0"
   },
 
+  /* ---- the tag itself -------------------------------------------------
+     background: a ready-made design (PNG/JPG) printed behind everything.
+                 Leave "" and the tag is a plain coloured card instead.
+     ratio:      the design's width / height, e.g. 1748 x 1240 = 1.41
+     nameBox:    false = the name sits straight on the design, no field
+     chooseCover:false = skip the "Pick your cover" screen (one cover only)  */
+  tag: {
+    background:  "",
+    ratio:       1.48,
+    nameBox:     true,
+    chooseCover: true
+  },
+
   /* only the colours you want to change -- the rest stay as they are */
   palette: {
     "teal":           "#1C8C82",
@@ -46,11 +59,12 @@ window.EVENT = {
   },
 
   brand: {
-    tagLogo:    "assets/brand/tag-logo.png",
-    badge:      "assets/brand/badge.png",
-    check:      "assets/brand/check.png",
-    partners:   "",          /* "" removes the partner strip */
-    pledgeIcon: ""           /* "" removes the pledge icon */
+    tagLogo:    "assets/brand/tag-logo.png",   /* corner of the tag */
+    tagBadge:   "",                            /* watermark on the tag */
+    tagCheck:   "",                            /* mark at the bottom of the tag */
+    badge:      "assets/brand/badge.png",      /* header and footer of the app */
+    partners:   "",                            /* "" removes the partner strip */
+    pledgeIcon: ""                             /* "" removes the pledge icon */
   },
 
   /* put your own PNG/WEBP files in assets/stickers/ and list them here */

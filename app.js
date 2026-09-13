@@ -5,6 +5,7 @@
   /* fill in anything the config leaves out, so a half-finished config still runs */
   EVENT.text = EVENT.text || {};
   EVENT.share = EVENT.share || {};
+  EVENT.tag = EVENT.tag || {};
   EVENT.brand = EVENT.brand || {};
   EVENT.stickerGroups = EVENT.stickerGroups || [];
   EVENT.gallery = EVENT.gallery || [];
@@ -58,8 +59,13 @@
   }
 
   /* ---------- navigation ---------- */
+  /* steps switched off in the config are stepped over, in the direction of travel */
+  var SKIP_STEP = {};
+
   function goToStep(n){
     n = Math.max(0, Math.min(TOTAL_STEPS-1, n));
+    var dir = (n >= state.step) ? 1 : -1;
+    while(SKIP_STEP[n] && n > 0 && n < TOTAL_STEPS-1) n += dir;
     state.step = n;
     $all(".screen").forEach(function(s){ s.classList.toggle("active", parseInt(s.dataset.step,10) === n); });
     $("#backBtn").hidden = (n === 0);
@@ -1039,8 +1045,23 @@
     $all("[data-img]").forEach(function(el){
       var val = B[el.getAttribute("data-img")];
       if(val) el.setAttribute("src", val);
-      else if(val === "") drop(el);
+      else drop(el);          /* no picture in the config: no empty slot either */
     });
+
+    /* the tag itself: a ready-made design behind it, its shape, its name field */
+    var TAG = EVENT.tag;
+    if(TAG.background){
+      root.style.setProperty("--tag-bg", 'url("' + TAG.background + '")');
+      $all(".tag").forEach(function(el){ el.classList.add("has-bg"); });
+    }
+    if(TAG.ratio) root.style.setProperty("--tag-ratio", String(TAG.ratio));
+    if(TAG.nameBox === false) $all(".tag").forEach(function(el){ el.classList.add("no-namebox"); });
+    if(TAG.cover) state.cover = TAG.cover;
+    if(TAG.chooseCover === false){          /* one cover only: no "Pick your cover" screen */
+      SKIP_STEP[1] = true;
+      var coverScreen = document.querySelector('.screen[data-step="1"]');
+      if(coverScreen) coverScreen.hidden = true;
+    }
 
     if(EVENT.pageTitle) document.title = EVENT.pageTitle;
     var meta = document.querySelector('meta[name="description"]');

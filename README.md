@@ -1,12 +1,12 @@
-# Tag Maker — a skeleton for any event
+# ECEIA 2026 Batumi — Tag Maker
 
-A small web app where people at your event type their name, build their own
-name tag, add stickers and photos, write a few words, and take away a 4:5
-keepsake image they can save or post.
+A small web app for people at **ECEIA 2026 in Batumi**: type your name, build
+your own name tag out of the conference design and the sticker set, write a few
+words, add photos, and take away a keepsake image you can save or post.
 
-It started as the ENAI Summer School Dubai 2026 tag maker
-([live](https://anetajaskova-ai.github.io/ENAI-Tag-Maker/)); this repository is
-the same app with every event-specific thing pulled out into one file you edit.
+Built on the reusable
+[Tag Maker skeleton](https://github.com/anetajaskova-ai/ENAI-Tag-Maker-Template) —
+everything specific to this conference lives in `event.config.js`.
 
 ---
 
@@ -34,14 +34,25 @@ Everything lives in **`event.config.js`**, in eight numbered sections:
 | --- | --- |
 | 1. the event | browser tab title and description |
 | 2. the words | every headline, the text on the tag, the consent line |
-| 3. the colours | the whole palette, including the three tag covers |
-| 4. the logos | the five logo slots |
-| 5. the stickers | the sticker menu, in groups |
-| 6. the gallery photos | the ready-made photos people can pick |
-| 7. sharing | handles, hashtags, the Instagram link, the file name |
-| 8. technical | the key half-finished tags are stored under |
+| 3. the tag | the printed design behind the tag, its shape, the name field, whether people pick a cover |
+| 4. the colours | the whole palette, including the three tag covers |
+| 5. the logos | the five logo slots |
+| 6. the stickers | the sticker menu, in groups |
+| 7. the gallery photos | the ready-made photos people can pick |
+| 8. sharing | handles, hashtags, the Instagram link, the file name |
+| 9. technical | the key half-finished tags are stored under |
 
-Two shortcuts worth knowing:
+Three shortcuts worth knowing:
+
+* **A ready-made design can go behind the tag.** Put the artwork in
+  `assets/brand/`, set `tag.background` to it and `tag.ratio` to its
+  width ÷ height. With `nameBox: false` the name then sits straight on the
+  design, and the three logo slots (`tagLogo`, `tagBadge`, `tagCheck`) are
+  normally left empty because the design already carries the branding.
+* **`chooseCover: false`** skips the "Pick your cover" screen — for events
+  where there is only one tag design.
+
+And the two from before:
 
 * **`""` removes something.** An empty logo, an empty pledge line or an empty
   `placeName` makes that element disappear instead of showing a blank box.
@@ -145,11 +156,16 @@ Two libraries load from a CDN, so the app needs an internet connection:
 
 ## Assets and credits
 
-The tag design, layout and wording come from the ENAI Summer School design deck.
-The artwork shipped in `assets/` belongs to its respective owners — ECAI, ENAI,
-the partner universities and the organisers' Dubai photography — and was
-included for that event.
+* The name tag design, the ECEIA26 mark and the sticker set come from the
+  ECEIA 2026 organisers. `assets/brand/name-tag.png` is the supplied design with
+  the ENAI and university logos and the handwriting line taken out, since the
+  app prints the name itself.
+* Batumi photography: Unsplash (Ivars Utinans, Max, Sergio Guardiola Herrador)
+  and Pixabay (svetlbel).
+* Partner and sponsor marks belong to their owners and are included for this
+  conference.
+* The full-size originals stay in `_originals/` on your own machine and are kept
+  out of the repository (see `.gitignore`).
 
-**If you reuse this for a different event, replace those files with your own.**
-They are not covered by any licence you may add to the code, and a public
-repository publishes them to everyone.
+**Reusing this for another event?** Replace everything in `assets/` with your
+own artwork — none of the above is covered by a licence you can pass on.
