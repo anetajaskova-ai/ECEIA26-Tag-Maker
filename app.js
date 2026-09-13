@@ -63,6 +63,11 @@
   }
   function persist(){
     try{
+      if(!resumeWindow()){
+        /* nothing is resumed, so leave nothing behind either */
+        localStorage.removeItem(STORAGE_KEY);
+        return;
+      }
       state.savedAt = Date.now();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }catch(e){}

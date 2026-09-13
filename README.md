@@ -47,9 +47,12 @@ Everything lives in **`event.config.js`**, in eight numbered sections:
 **Half-finished tags and privacy.** A tag in progress is kept in the visitor's
 own browser so a reload — or a detour to the camera — does not lose it.
 `resumeMinutes` says for how long: after that the next person to open the app
-starts with a clean one, and nobody sees what someone else was making. The
-default is 20 minutes; set `0` for a shared tablet, where every visit should
-start fresh.
+starts with a clean one, and nobody sees what someone else was making.
+
+**This conference is set to `0`**: every visit starts fresh and nothing at all
+is written into the visitor's browser. The cost is that a reload — an iPad
+suspending the tab while someone takes a photo, say — starts them over. Set it
+to `20` if you would rather protect against that.
 
 Three shortcuts worth knowing:
 
