@@ -4,6 +4,8 @@ A small web app for people at **ECEIA 2026 in Batumi**: type your name, build
 your own name tag out of the conference design and the sticker set, write a few
 words, add photos, and take away a keepsake image you can save or post.
 
+**Live: https://anetajaskova-ai.github.io/ECEIA26-Tag-Maker/**
+
 Built on the reusable
 [Tag Maker skeleton](https://github.com/anetajaskova-ai/ENAI-Tag-Maker-Template) —
 everything specific to this conference lives in `event.config.js`.
@@ -91,12 +93,39 @@ a small server matches what your visitors will get.)
 
 ---
 
+## The QR code
+
+Print-ready material for the conference lives in `qr/`:
+
+| File | What it is |
+| --- | --- |
+| `eceia26-card-a5.pdf` / `.png` | A5 card — table tents, handouts, badges table |
+| `eceia26-poster-a4.pdf` / `.png` | the same as an A4 poster |
+| `eceia26-qr.png` | the bare code, 2000 px, for slides or your own layout |
+| `make-qr.py` | regenerates all of the above |
+
+The code points at the live address above. Printed at A5 the code is 68 mm
+wide, which scans from about a metre away; it still decodes when reduced to
+150 px, so smaller reprints are safe.
+
+If the address ever changes, edit `URL` at the top of `qr/make-qr.py` and run:
+
+```bash
+python3 qr/make-qr.py
+```
+
 ## Publishing
 
 The folder is a plain static site, so anything that serves files will do.
 GitHub Pages, step by step:
 
-1. Push this folder to a GitHub repository.
+This one is already live from
+[anetajaskova-ai/ECEIA26-Tag-Maker](https://github.com/anetajaskova-ai/ECEIA26-Tag-Maker):
+push to `main` and GitHub Pages rebuilds it within a minute or two.
+
+For a brand new event:
+
+1. Push the folder to a GitHub repository.
 2. **Settings → Pages**.
 3. **Source:** Deploy from a branch · **Branch:** `main` / `/ (root)` · **Save**.
 4. A minute later it is live at `https://<user>.github.io/<repo>/`.
