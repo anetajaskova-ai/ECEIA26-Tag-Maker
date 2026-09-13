@@ -227,7 +227,14 @@ img{display:block;}
   border-radius:3.7% / 2.33%;                 /* the film's 2 mm corners */
   box-shadow:0 6px 16px -6px rgba(0,0,0,.45);
 }
-.placed-sticker .tag-photo img{width:100%; aspect-ratio:46/62; object-fit:cover; display:block;}
+/* the window the picture is cropped inside, exactly the film's 46 x 62 mm */
+.placed-sticker .film-window{
+  position:relative; display:block; width:100%; aspect-ratio:46/62; overflow:hidden;
+}
+.placed-sticker .film-window img{
+  position:absolute; display:block; max-width:none; user-select:none;
+}
+.placed-sticker.selected .film-window{cursor:move;}
 .placed-sticker .tag-photo.is-empty{cursor:pointer;}
 .placed-sticker .photo-drop{
   display:flex; align-items:center; justify-content:center;

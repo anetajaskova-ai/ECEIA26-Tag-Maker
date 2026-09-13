@@ -180,7 +180,12 @@
                 </div>
               </div>
               </div>
-              <div class="hint">Your photo and the stickers work the same way: tap to select, drag to move, and use the corner handles to resize, rotate or remove.</div>
+              <div class="zoom-row" id="photoZoomRow" hidden>
+                <label for="photoZoom">Photo zoom</label>
+                <input type="range" id="photoZoom" min="1" max="4" step="0.02" value="1">
+                <button class="zoom-reset" type="button" id="photoZoomReset">Reset</button>
+              </div>
+              <div class="hint">Your photo and the stickers work the same way: tap to select, drag to move, and use the corner handles to resize, rotate or remove. Once the print is selected, drag the picture inside it to choose what shows &mdash; and move the print itself by its white border.</div>
             </div>
           </div>
 
@@ -403,7 +408,7 @@
 
             <label class="consent-row">
               <input type="checkbox" id="consentCheck">
-              <span data-text="consent">I'm happy for ENAI to share this tag and my words, and I agree to tag @ecaiu_official and @enaiofficial on Instagram and LinkedIn.</span>
+              <span data-text="consent">I'm happy for the organisers to share this tag and my words.</span>
             </label>
             </div>
 
@@ -428,7 +433,7 @@
               <b>How sharing works:</b> On a phone, <b>Save to device</b> opens your share sheet &mdash;
               choose <b>Save Image</b> and the keepsake goes into your photos. Instagram and TikTok
               don't let a website post for you, so open Instagram afterwards and pick it from there. The caption
-              (including <b>@ecaiu_official</b> and <b>@enaiofficial</b>) is copied for you &mdash; paste it and
+              <span data-handles-note>(including <b data-handles>@enaiofficial</b>)</span> is copied for you &mdash; paste it and
               the tags become real mentions. <b>Share</b> opens your phone's share sheet with the
               image attached where your device supports it; LinkedIn and WhatsApp open with the text ready.
             </p>

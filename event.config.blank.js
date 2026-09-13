@@ -84,5 +84,10 @@ window.EVENT = {
     fileSlug:     "myevent"
   },
 
-  storageKey: "myevent-tag-state-v1"
+  storageKey: "myevent-tag-state-v1",
+
+  /* minutes a half-finished tag is kept in the visitor's browser;
+     0 = every visit starts fresh (a shared tablet),
+     false = keep it until "Make another one" is pressed                     */
+  resumeMinutes: 20
 };

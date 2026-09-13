@@ -42,7 +42,14 @@ Everything lives in **`event.config.js`**, in eight numbered sections:
 | 6. the stickers | the sticker menu, in groups |
 | 7. the gallery photos | the ready-made photos people can pick |
 | 8. sharing | handles, hashtags, the Instagram link, the file name |
-| 9. technical | the key half-finished tags are stored under |
+| 9. technical | the key half-finished tags are stored under, and how long they are kept |
+
+**Half-finished tags and privacy.** A tag in progress is kept in the visitor's
+own browser so a reload — or a detour to the camera — does not lose it.
+`resumeMinutes` says for how long: after that the next person to open the app
+starts with a clean one, and nobody sees what someone else was making. The
+default is 20 minutes; set `0` for a shared tablet, where every visit should
+start fresh.
 
 Three shortcuts worth knowing:
 
@@ -150,8 +157,10 @@ USB stick, or pasting it somewhere that accepts a single HTML file.
 
 1. **Their name** — typed on the welcome screen.
 2. **A cover** — teal, mint or lavender.
-3. **A tag of their own** — a portrait photo plus stickers, each one dragged,
-   resized and rotated by hand.
+3. **A tag of their own** — an instax-style print plus stickers, each one
+   dragged, resized and rotated by hand. Select the print and the picture
+   inside it can be zoomed and dragged into place; the white border moves the
+   print itself.
 4. **A few words** — a reflection page with prompts, which becomes the first
    part of their caption.
 5. **Pictures** — one from the gallery or their own, plus a photo from the

@@ -33,17 +33,40 @@
     sceneCrop: { x:0, y:0, zoom:1 },
     selfieMode: "single", selfiePhoto: null, selfieCollage: [],
     selfieCrop: { x:0, y:0, zoom:1 },
-    previewScale: 1, tagPos: { x:50, y:50 }, caption: "", captionEdited: false, step: 0
+    previewScale: 1, tagPos: { x:50, y:50 }, caption: "", captionEdited: false, step: 0,
+    savedAt: 0
   };
   var selectedSticker = null;
 
+  /* A half-finished tag is kept in this browser so a reload does not lose it,
+     but only for EVENT.resumeMinutes. After that the next person to open the
+     app -- on a shared tablet, say -- starts with a clean one. 0 means never
+     resume, false means keep it until "Make another one" is pressed.          */
+  function resumeWindow(){
+    var m = EVENT.resumeMinutes;
+    if(m === false) return Infinity;
+    if(m === undefined || m === null) m = 20;
+    return Number(m) * 60000;
+  }
   function load(){
     try{
       var raw = localStorage.getItem(STORAGE_KEY);
-      if(raw){ var saved = JSON.parse(raw); for(var k in saved){ if(k in state) state[k] = saved[k]; } }
+      if(!raw) return;
+      var saved = JSON.parse(raw);
+      var window_ = resumeWindow();
+      if(!window_ || (Date.now() - (saved.savedAt || 0)) > window_){
+        localStorage.removeItem(STORAGE_KEY);      /* somebody else's, or long forgotten */
+        return;
+      }
+      for(var k in saved){ if(k in state) state[k] = saved[k]; }
     }catch(e){}
   }
-  function persist(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
+  function persist(){
+    try{
+      state.savedAt = Date.now();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }catch(e){}
+  }
 
   function $(sel, root){ return (root||document).querySelector(sel); }
   function $all(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
@@ -388,7 +411,8 @@
     if(found) return found;
     var item = {
       kind:"photo", id:"__photo__", uid:"photo-slot",
-      src:null, x:14, y:8, size:30, rot:-6   /* instax prints are tall: start a little smaller */
+      src:null, x:14, y:8, size:30, rot:-6,  /* instax prints are tall: start a little smaller */
+      crop:{ x:0, y:0, zoom:1 }               /* the picture's position inside the film window */
     };
     state.stickers.push(item);
     return item;
@@ -396,6 +420,7 @@
   function setTagPhoto(url){
     var slot = photoSlot();
     slot.src = url;
+    slot.crop = { x:0, y:0, zoom:1 };   /* a new picture starts centred */
     selectedSticker = slot.uid;   /* show the handles straight away */
   }
   function clearTagPhoto(){
@@ -408,6 +433,25 @@
     state.stickers = state.stickers.filter(function(s){ return s.uid !== uid; });
     if(selectedSticker === uid) selectedSticker = null;
     renderPlacedStickers(); persist();
+  }
+
+  /* the picture inside the film, cropped the same way as the big photo frames */
+  function filmCrop(s){
+    if(!s.crop) s.crop = { x:0, y:0, zoom:1 };
+    return s.crop;
+  }
+  function applyFilmCrop(el, s){
+    var win = el.querySelector(".film-window"), img = win && win.querySelector("img");
+    if(!win || !img) return;
+    var put = function(){ applyCropTo(win, img, filmCrop(s)); };
+    if(img.complete && img.naturalWidth) put();
+    img.addEventListener("load", put);
+  }
+  function syncFilmCrops(){
+    $all(".placed-sticker").forEach(function(el){
+      var model = state.stickers.filter(function(s){ return s.uid === el.dataset.uid; })[0];
+      if(model && model.kind === "photo" && model.src) applyFilmCrop(el, model);
+    });
   }
 
   function stickerStyle(el, s){
@@ -425,7 +469,7 @@
     stickerStyle(el, s);
     if(s.kind === "photo"){
       el.innerHTML = s.src
-        ? '<span class="tag-photo"><img src="'+s.src+'" alt="" draggable="false"></span>'
+        ? '<span class="tag-photo"><span class="film-window"><img src="'+s.src+'" alt="" draggable="false"></span></span>'
         : '<span class="tag-photo is-empty"><span class="photo-drop"><span class="photo-drop-btn">Upload</span></span></span>';
       if(!s.src) el.classList.add("photo-empty");
     } else {
@@ -453,6 +497,7 @@
         if(onStage) el.classList.add("on-stage");
         wireSticker(el, host, s);
         host.appendChild(el);
+        if(s.kind === "photo" && s.src) applyFilmCrop(el, s);
       });
     }
     var mtag = $("#tagPreview5"), mstage = $("#tagStage5");
@@ -461,7 +506,7 @@
       state.stickers.forEach(function(s){
         if(s.kind === "photo" && !s.src) return;    /* nothing uploaded yet */
         var el = buildSticker(s, false);
-        if(s.kind === "photo"){ el.classList.add("on-stage"); mstage.appendChild(el); }
+        if(s.kind === "photo"){ el.classList.add("on-stage"); mstage.appendChild(el); applyFilmCrop(el, s); }
         else mtag.appendChild(el);
       });
     }
@@ -487,8 +532,15 @@
       }
       ev.stopPropagation();
       ev.preventDefault();
+      /* on a print that is already selected, the window itself pans the picture;
+         the white border still moves the whole print                          */
+      if(act === "move" && model.kind === "photo" && model.src &&
+         selectedSticker === model.uid && ev.target.closest(".film-window")){
+        act = "pan";
+      }
       selectSticker(model.uid);
       mode = act; moved = false;
+      if(act === "pan") start = { x: ev.clientX, y: ev.clientY };
       var c = centerPx();
       if(act === "resize"){
         start = { dist: Math.hypot(ev.clientX - c.cx, ev.clientY - c.cy), size: model.size };
@@ -513,6 +565,21 @@
       } else if(mode === "rotate"){
         var a = Math.atan2(ev.clientY - c.cy, ev.clientX - c.cx) * 180/Math.PI;
         model.rot = Math.round(start.rot + (a - start.ang));
+      } else if(mode === "pan"){
+        var win = el.querySelector(".film-window"), pic = win && win.querySelector("img");
+        if(win && pic){
+          var cr = filmCrop(model), box = coverBox(win, pic, cr.zoom);
+          var mx = ev.clientX - start.x, my = ev.clientY - start.y;
+          start = { x: ev.clientX, y: ev.clientY };
+          /* the print can be rotated, so undo that rotation on the drag itself */
+          var rad = (model.rot || 0) * Math.PI / 180;
+          var dx = mx * Math.cos(rad) + my * Math.sin(rad);
+          var dy = -mx * Math.sin(rad) + my * Math.cos(rad);
+          if(box.slackX > 0) cr.x = Math.max(-0.5, Math.min(0.5, (cr.x || 0) + dx / box.slackX));
+          if(box.slackY > 0) cr.y = Math.max(-0.5, Math.min(0.5, (cr.y || 0) + dy / box.slackY));
+          applyCropTo(win, pic, cr);
+        }
+        return;                       /* the print itself has not moved */
       }
       stickerStyle(el, model);
     });
@@ -530,14 +597,29 @@
   function selectSticker(uid){
     if(selectedSticker === uid) return;
     selectedSticker = uid;
-    $all("#tagPreview2 .placed-sticker").forEach(function(el){
+    $all("#tagStage2 .placed-sticker").forEach(function(el){
       el.classList.toggle("selected", el.dataset.uid === uid);
     });
+    syncPhotoZoom();
   }
   function deselectSticker(){
     if(!selectedSticker) return;
     selectedSticker = null;
-    $all("#tagPreview2 .placed-sticker").forEach(function(el){ el.classList.remove("selected"); });
+    $all("#tagStage2 .placed-sticker").forEach(function(el){ el.classList.remove("selected"); });
+    syncPhotoZoom();
+  }
+
+  /* the zoom slider belongs to the print, so it only shows while that is selected */
+  function selectedPhoto(){
+    var s = state.stickers.filter(function(x){ return x.uid === selectedSticker; })[0];
+    return (s && s.kind === "photo" && s.src) ? s : null;
+  }
+  function syncPhotoZoom(){
+    var row = $("#photoZoomRow");
+    if(!row) return;
+    var photo = selectedPhoto();
+    row.hidden = !photo;
+    if(photo) $("#photoZoom").value = filmCrop(photo).zoom;
   }
 
   /* ---------- journal ---------- */
@@ -1063,6 +1145,10 @@
       if(coverScreen) coverScreen.hidden = true;
     }
 
+    var handles = EVENT.share.handles;
+    $all("[data-handles]").forEach(function(el){ if(handles) el.textContent = handles; });
+    if(!handles) $all("[data-handles-note]").forEach(drop);
+
     if(EVENT.pageTitle) document.title = EVENT.pageTitle;
     var meta = document.querySelector('meta[name="description"]');
     if(meta && EVENT.pageDescription) meta.setAttribute("content", EVENT.pageDescription);
@@ -1105,6 +1191,21 @@
     syncKeepsake();
     /* image sizes depend on layout, so refresh once everything has settled */
     window.addEventListener("resize", syncCrops);
+    window.addEventListener("resize", syncFilmCrops);
+
+    $("#photoZoom").addEventListener("input", function(){
+      var photo = selectedPhoto();
+      if(!photo) return;
+      filmCrop(photo).zoom = parseFloat(this.value) || 1;
+      syncFilmCrops();
+    });
+    $("#photoZoom").addEventListener("change", persist);
+    $("#photoZoomReset").addEventListener("click", function(){
+      var photo = selectedPhoto();
+      if(!photo) return;
+      photo.crop = { x:0, y:0, zoom:1 };
+      syncFilmCrops(); syncPhotoZoom(); persist();
+    });
     $all("#sceneHeroImg, #sceneImg, #selfieImg").forEach(function(img){
       img.addEventListener("load", syncCrops);
     });

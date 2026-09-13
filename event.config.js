@@ -151,5 +151,15 @@ window.EVENT = {
   },
 
   /* ---- 9. technical ---------------------------------------------------- */
-  storageKey: "eceia26-tag-state-v1"
+  /* Half-finished tags are kept in the visitor's browser under this key.
+     Give each new event its own key so old drafts do not reappear.          */
+  storageKey: "eceia26-tag-state-v1",
+
+  /* How long a half-finished tag is kept, in minutes. It survives a reload
+     or a detour to the camera, but after that the next person to open the
+     app starts with a clean one.
+       20    -- the default, sensible for phones
+       0     -- never resume: every visit starts fresh (a shared tablet)
+       false -- keep it until "Make another one" is pressed                  */
+  resumeMinutes: 20
 };
