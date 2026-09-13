@@ -388,7 +388,7 @@
     if(found) return found;
     var item = {
       kind:"photo", id:"__photo__", uid:"photo-slot",
-      src:null, x:14, y:6, size:34, rot:-6
+      src:null, x:14, y:8, size:30, rot:-6   /* instax prints are tall: start a little smaller */
     };
     state.stickers.push(item);
     return item;
