@@ -158,9 +158,11 @@ window.EVENT = {
   /* How long a half-finished tag is kept, in minutes. It survives a reload
      or a detour to the camera, but after that the next person to open the
      app starts with a clean one.
-       20    -- a sensible default for phones
+       20    -- the setting here: long enough to come back to a half-finished
+                tag, short enough that a device passed to the next person
+                does not show them somebody else's
        0     -- never resume: every visit starts fresh, and nothing at all is
                 written into the visitor's browser
        false -- keep it until "Make another one" is pressed                  */
-  resumeMinutes: 0
+  resumeMinutes: 20
 };

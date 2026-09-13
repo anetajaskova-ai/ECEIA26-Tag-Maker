@@ -49,10 +49,12 @@ own browser so a reload — or a detour to the camera — does not lose it.
 `resumeMinutes` says for how long: after that the next person to open the app
 starts with a clean one, and nobody sees what someone else was making.
 
-**This conference is set to `0`**: every visit starts fresh and nothing at all
-is written into the visitor's browser. The cost is that a reload — an iPad
-suspending the tab while someone takes a photo, say — starts them over. Set it
-to `20` if you would rather protect against that.
+**This conference is set to `20`**: people can come back to a half-finished tag
+within twenty minutes, and a device handed to the next person after that shows
+them a clean one. A draft never leaves the browser it was made in — it is tied
+to this address and that browser profile — so people on their own phones and
+laptops never see each other's. Set `0` if you would rather nothing at all were
+kept, at the cost of a reload starting someone over.
 
 Three shortcuts worth knowing:
 
